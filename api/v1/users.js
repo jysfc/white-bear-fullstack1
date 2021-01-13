@@ -10,10 +10,8 @@ const { toJson, toSafeParse } = require("../../utils/helpers");
 //@access       Public
 
 router.get("/", (req, res) => {
-   db.query(selectUser("mike@gmail.com", "replace_me"), (err, dbRes) => {
-      if (err) {
-         console.log(err);
-      } else {
+   db.query(selectUser("mike@gmail.com", "replace_me"))
+      .then((dbRes) => {
          const user = toSafeParse(toJson(dbRes))[0];
          // const jsonRes = toJson(res);
          // const parsedRes = toSafeParse(jsonRes);
@@ -21,8 +19,11 @@ router.get("/", (req, res) => {
          // const user = firstObj;
          console.log(user);
          res.json(user);
-      }
-   });
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
 });
 
 module.exports = router;
