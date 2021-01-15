@@ -1,8 +1,5 @@
 const express = require("express");
 const app = express();
-var cors = require("cors");
-
-app.use(cors());
 
 app.use("/api/v1/users", require("./api/v1/users"));
 app.use("/api/v1/memory-cards", require("./api/v1/memory-cards"));
