@@ -11,7 +11,8 @@ const selectAllCards = require("../../queries/selectAllCards");
 router.get("/", (req, res) => {
    console.log(req.query);
    const { userId, searchTerm, order } = req.query;
-   db.query(selectAllCards(userId, searchTerm, order))
+   /* https://www.npmjs.com/package/mysql#escaping-query-values */
+   db.query(selectAllCards, [userId, searchTerm, searchTerm, order])
       .then((dbRes) => {
          //  console.log(dbRes);
          res.json(dbRes);
