@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
       userId,
       constructedSearchTerm,
       constructedSearchTerm,
-      order,
+      { toSqlString: () => order }, // convert to string to work
    ])
       .then((memoryCards) => {
          //  console.log(memoryCards);
