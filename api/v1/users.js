@@ -26,4 +26,11 @@ router.get("/", (req, res) => {
       });
 });
 
+//@route        POST api/v1/users
+//@desc         Create a new user
+//@access       Public
+router.post("/", (req, res) => {
+   console.log(req.body);
+});
+
 module.exports = router;

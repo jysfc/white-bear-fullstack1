@@ -36,7 +36,7 @@ export default class AllCards extends React.Component {
    setMemoryCards() {
       axios
          .get(
-            `api/v1/memory-cards?userId=${userId}&searchTerm=${this.state.searchTerm}&order=${this.state.order}`
+            `/api/v1/memory-cards?userId=${userId}&searchTerm=${this.state.searchTerm}&order=${this.state.order}`
          )
          .then((res) => {
             // handle success
