@@ -4,7 +4,6 @@ const router = express.Router();
 const db = require("../../db");
 const selectUser = require("../../queries/selectUser");
 const { toJson, toSafeParse, toHash } = require("../../utils/helpers");
-const bcrypt = require("bcrypt");
 
 //@route        GET api/v1/users
 //@desc         Get a valid user via email and password
