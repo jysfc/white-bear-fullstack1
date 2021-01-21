@@ -3,7 +3,8 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db");
 const selectUser = require("../../queries/selectUser");
-const { toJson, toSafeParse } = require("../../utils/helpers");
+const { toJson, toSafeParse, toHash } = require("../../utils/helpers");
+const bcrypt = require("bcrypt");
 
 //@route        GET api/v1/users
 //@desc         Get a valid user via email and password
@@ -29,8 +30,10 @@ router.get("/", (req, res) => {
 //@route        POST api/v1/users
 //@desc         Create a new user
 //@access       Public
-router.post("/", (req, res) => {
-   console.log(req.body);
+router.post("/", async (req, res) => {
+   const user = req.body;
+   user.password = await toHash(user.password);
+   console.log(user);
 });
 
 module.exports = router;
