@@ -2,51 +2,38 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const selectUser = require("../../queries/selectUser");
 const insertUser = require("../../queries/insertUser");
-const { toJson, toSafeParse, toHash } = require("../../utils/helpers");
-
-//@route        GET api/v1/users
-//@desc         Get a valid user via email and password
-//@access       Public
-
-router.get("/", (req, res) => {
-   db.query(selectUser("mike@gmail.com", "replace_me"))
-      .then((dbRes) => {
-         const user = toSafeParse(toJson(dbRes))[0];
-         // const jsonRes = toJson(res);
-         // const parsedRes = toSafeParse(jsonRes);
-         // const firstObj = parsedRes[0];
-         // const user = firstObj;
-         // console.log(user);
-         res.json(user);
-      })
-      .catch((err) => {
-         console.log(err);
-         res.status(400).json(err);
-      });
-});
+const { toHash } = require("../../utils/helpers");
+const getSignUpEmailError = require("../../validation/getSignUpEmailError");
+const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
 
 //@route        POST api/v1/users
 //@desc         Create a new user
 //@access       Public
 router.post("/", async (req, res) => {
-   const user = {
-      id: req.body.id,
-      email: req.body.email,
-      password: await toHash(req.body.password),
-      created_at: req.body.createdAt,
-   };
+   const { id, email, password, createdAt } = req.body;
+   const emailError = getSignUpEmailError(email);
+   const passwordError = getSignUpPasswordError(password);
+   if (emailError === "" && passwordError === "") {
+      const user = {
+         id, //id: id,
+         email, //email: email,
+         password: await toHash(password),
+         created_at: createdAt,
+      };
 
-   db.query(insertUser, user)
-      .then((dbRes) => {
-         console.log(dbRes);
-         // return the user data so we can put in redux store
-      })
-      .catch((err) => {
-         console.log(err);
-         // return a 400 error to user
-      });
+      db.query(insertUser, user)
+         .then((dbRes) => {
+            console.log(dbRes);
+            // return the user data so we can put in redux store
+         })
+         .catch((err) => {
+            console.log(err);
+            // return a 400 error to user
+         });
+   } else {
+      res.status(400).json({ emailError, passwordError });
+   }
 });
 
 module.exports = router;
