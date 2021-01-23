@@ -30,6 +30,7 @@ router.post("/", async (req, res) => {
          .catch((err) => {
             console.log(err);
             // return a 400 error to user
+            res.status(400).json({ emailError, passwordError });
          });
    } else {
       res.status(400).json({ emailError, passwordError });

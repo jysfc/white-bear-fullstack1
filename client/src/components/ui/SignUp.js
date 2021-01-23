@@ -4,7 +4,7 @@ import { v4 as getUuid } from "uuid";
 import { withRouter } from "react-router-dom";
 import { EMAIL_REGEX } from "../../utils/helpers";
 import axios from "axios";
-import actions from "../../store/actions";
+// import actions from "../../store/actions";
 import { connect } from "react-redux";
 
 class SignUp extends React.Component {
@@ -109,7 +109,7 @@ class SignUp extends React.Component {
                // Go to next page: this.props.history.push("/create-answer");
             })
             .catch((err) => {
-               console.log(err);
+               console.log(err.response.data);
             });
       }
    }
