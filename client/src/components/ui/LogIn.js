@@ -1,8 +1,6 @@
 import React from "react";
 import classnames from "classnames";
-import { v4 as getUuid } from "uuid";
 import { withRouter } from "react-router-dom";
-import { EMAIL_REGEX } from "../../utils/helpers";
 import axios from "axios";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
@@ -10,7 +8,6 @@ import { connect } from "react-redux";
 class LogIn extends React.Component {
    constructor(props) {
       super(props);
-
       this.state = {
          emailError: "",
          passwordError: "",
@@ -19,77 +16,45 @@ class LogIn extends React.Component {
       };
    }
 
-   async setEmailState(loginEmailInput) {
-      const lowerCaseLoginEmailInput = loginEmailInput.toLowerCase();
-      if (loginEmailInput === "")
-         this.setState({
-            emailError: "Please enter your email address.",
-            hasEmailError: true,
-         });
-      else if (EMAIL_REGEX.test(lowerCaseLoginEmailInput) === false) {
-         console.log(loginEmailInput);
-         this.setState({
-            emailError: "Please enter a valid email address.",
-            hasEmailError: true,
-         });
-      } else {
-         this.setState({ emailError: "", hasEmailError: false });
-      }
-   }
-
-   async setPasswordState(loginPasswordInput) {
-      console.log(loginPasswordInput);
-
-      if (loginPasswordInput === "") {
-         this.setState({
-            passwordError: "Please enter a password.",
-            hasPasswordError: true,
-         });
-      } else {
-         this.setState({ passwordError: "", hasPasswordError: false });
-      }
-   }
-
    async validateAndLogInUser() {
       const loginEmailInput = document.getElementById("login-email-input")
          .value;
       const loginPasswordInput = document.getElementById("login-password-input")
          .value;
-      await this.setEmailState(loginEmailInput);
-      await this.setPasswordState(loginPasswordInput);
-      if (
-         this.state.hasEmailError === false &&
-         this.state.hasPasswordError === false
-      ) {
-         const user = {
-            id: getUuid(),
-            email: loginEmailInput,
-            password: loginPasswordInput,
-            createdAt: Date.now(),
-         };
-         console.log("created user object for POST: ", user);
-         // mimic API response:
-         axios
-            .get(
-               "https://raw.githubusercontent.com/jysfc/white-bear-mpa/main/src/mock-data/users.json"
-            )
-            .then((res) => {
-               // handle success
-               const currentUser = res.data;
-               console.log(currentUser);
-               this.props.dispatch({
-                  type: actions.UPDATE_CURRENT_USER,
-                  payload: res.data,
-               });
-            })
-            .catch((error) => {
-               // handle error
-               console.log(error);
-            });
 
-         // redirect the user
-         this.props.history.push("/create-answer");
-      }
+      const user = {
+         email: loginEmailInput,
+         password: loginPasswordInput,
+      };
+      console.log("created user object for POST: ", user);
+      axios
+         .post("/api/v1/users/auth", user)
+         .then((res) => {
+            // handle success
+            const currentUser = res.data;
+            console.log(currentUser);
+            this.props.dispatch({
+               type: actions.UPDATE_CURRENT_USER,
+               payload: res.data,
+            });
+            // redirect the user
+            // this.props.history.push("/create-answer");
+         })
+         .catch((err) => {
+            const { data } = err.response;
+            console.log(data);
+            const { emailError, passwordError } = data;
+            if (emailError !== "") {
+               this.setState({ hasEmailError: true, emailError });
+            } else {
+               this.setState({ hasEmailError: false, emailError });
+            }
+            if (passwordError !== "") {
+               this.setState({ hasPasswordError: true, passwordError });
+            } else {
+               this.setState({ hasPasswordError: false, passwordError });
+            }
+         });
    }
 
    render() {

@@ -7,6 +7,8 @@ const selectUserById = require("../../queries/selectUserById");
 const { toHash } = require("../../utils/helpers");
 const getSignUpEmailError = require("../../validation/getSignUpEmailError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
+const getLoginEmailError = require("../../validation/getLoginEmailError");
+const getLoginPasswordError = require("../../validation/getLoginPasswordError");
 
 //@route        POST api/v1/users
 //@desc         Create a new user
@@ -46,6 +48,22 @@ router.post("/", async (req, res) => {
             dbError = `${err.code} ${err.sqlMessage}`;
             res.status(400).json({ dbError });
          });
+   } else {
+      res.status(400).json({ emailError, passwordError });
+   }
+});
+
+//@route        POST api/v1/users/auth
+//@desc         Check this user against the db via email and password
+//@access       Public
+
+router.post("/auth", async (req, res) => {
+   const { email, password } = req.body;
+   const emailError = getLoginEmailError(email);
+   const passwordError = await getLoginPasswordError(password, email);
+   let dbError = "";
+   if (emailError === "" && passwordError === "") {
+      // return the user to the client
    } else {
       res.status(400).json({ emailError, passwordError });
    }
