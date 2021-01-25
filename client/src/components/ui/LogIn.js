@@ -26,19 +26,16 @@ class LogIn extends React.Component {
          email: loginEmailInput,
          password: loginPasswordInput,
       };
-      console.log("created user object for POST: ", user);
+      // console.log("created user object for POST: ", user); // will show user/pw on console
       axios
          .post("/api/v1/users/auth", user)
          .then((res) => {
-            // handle success
-            const currentUser = res.data;
-            console.log(currentUser);
+            // Update currentUser in global state with API response
             this.props.dispatch({
                type: actions.UPDATE_CURRENT_USER,
                payload: res.data,
             });
-            // redirect the user
-            // this.props.history.push("/create-answer");
+            this.props.history.push("/create-answer");
          })
          .catch((err) => {
             const { data } = err.response;

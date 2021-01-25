@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require("../../db");
 const insertUser = require("../../queries/insertUser");
 const selectUserById = require("../../queries/selectUserById");
+const selectUserByEmail = require("../../queries/selectUserByEmail");
 const { toHash } = require("../../utils/helpers");
 const getSignUpEmailError = require("../../validation/getSignUpEmailError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
@@ -64,6 +65,20 @@ router.post("/auth", async (req, res) => {
    let dbError = "";
    if (emailError === "" && passwordError === "") {
       // return the user to the client
+      db.query(selectUserByEmail, email)
+         .then((users) => {
+            const user = users[0];
+            res.status(200).json({
+               id: user.id,
+               email: user.email,
+               createdAt: user.created_at,
+            });
+         })
+         .catch((err) => {
+            console.log(err);
+            dbError = `${err.code} ${err.sqlMessage}`;
+            res.status(400).json({ dbError });
+         });
    } else {
       res.status(400).json({ emailError, passwordError });
    }
