@@ -31,10 +31,13 @@ class LogIn extends React.Component {
       axios
          .post("/api/v1/users/auth", user)
          .then((res) => {
-            // Update currentUser in global state with API response
+            // set token in localStorage
+            const authToken = res.data;
+            localStorage.setItem("authToken", authToken);
+            const user = jwtDecode(authToken);
             this.props.dispatch({
                type: actions.UPDATE_CURRENT_USER,
-               payload: res.data,
+               payload: user,
             });
             this.props.history.push("/create-answer");
          })
