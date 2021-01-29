@@ -89,15 +89,13 @@ export default class CreateImagery extends React.Component {
                Back to answer
             </Link>
 
-            <Link
-               to="/create-answer"
+            <button
                className={classnames(
                   "btn btn-primary btn-lg ml-4 float-right",
                   {
                      disabled: this.checkHasInvalidCharCount(),
                   }
                )}
-               id="save-card"
             >
                <img
                   src={saveIcon}
@@ -106,7 +104,7 @@ export default class CreateImagery extends React.Component {
                   style={{ marginBottom: "3px", marginRight: "4px" }}
                />
                Save
-            </Link>
+            </button>
          </AppTemplate>
       );
    }

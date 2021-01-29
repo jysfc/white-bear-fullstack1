@@ -5,4 +5,6 @@ function checkIsOver(str, num) {
 
 const MAX_CARD_CHARS = 240;
 
-export { checkIsOver, MAX_CARD_CHARS };
+const defaultLevel = 1;
+
+export { checkIsOver, MAX_CARD_CHARS, defaultLevel };
