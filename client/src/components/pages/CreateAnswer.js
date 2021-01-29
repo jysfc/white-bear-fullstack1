@@ -30,15 +30,15 @@ class CreateAnswer extends React.Component {
 
    setCreatableCard() {
       console.log("UPDATE_CREATABLE_CARD");
-      const currentTime = Date.now()
+      const currentTime = Date.now();
       this.props.dispatch({
          type: actions.UPDATE_CREATABLE_CARD,
          payload: {
             // the card itself
             id: getUuid(),
-            answer: "",
+            answer: this.state.answerText,
             imagery: "",
-            userId: "",
+            userId: this.props.currentUser.id,
             createdAt: currentTime,
             nextAttemptAt: getNextAttemptAt(defaultLevel, currentTime),
             lastAttemptAt: currentTime,
@@ -46,6 +46,7 @@ class CreateAnswer extends React.Component {
             level: 1,
          },
       });
+      this.props.history.push("/create-imagery");
    }
 
    render() {
@@ -102,7 +103,7 @@ class CreateAnswer extends React.Component {
    }
 }
 function mapStateToProps(state) {
-   return {};
+   return { currentUser: state.currentUser };
 }
 
 export default connect(mapStateToProps)(CreateAnswer);
