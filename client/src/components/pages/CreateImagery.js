@@ -4,11 +4,10 @@ import saveIcon from "../../icon/save.svg";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 import { checkIsOver, MAX_CARD_CHARS } from "../../utils/helpers";
-import memoryCards from "../../mock-data/memory-cards";
+import { connect } from "react-redux";
+import actions from "../../store/actions";
 
-const memoryCard = memoryCards[1];
-
-export default class CreateImagery extends React.Component {
+class CreateImagery extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
@@ -27,6 +26,37 @@ export default class CreateImagery extends React.Component {
 
    setCreateImageryText(e) {
       this.setState({ CreateImageryText: e.target.value });
+   }
+
+   updateCreatableCard() {
+      console.log("updating creatable card");
+      const {
+         id,
+         answer,
+         userId,
+         createdAt,
+         nextAttemptAt,
+         lastAttemptAt,
+         totalSuccessfulAttempts,
+         level,
+      } = this.props.creatableCard;
+      this.props.dispatch({
+         type: actions.UPDATE_CREATABLE_CARD,
+         payload: {
+            // the card itself
+            id,
+            answer,
+            imagery: this.state.CreateImageryText,
+            userId,
+            createdAt,
+            nextAttemptAt,
+            lastAttemptAt,
+            totalSuccessfulAttempts,
+            level,
+         },
+      });
+      // save to the database (make an API call)
+      // go to create-answer
    }
 
    render() {
@@ -52,13 +82,7 @@ export default class CreateImagery extends React.Component {
 
             <div className="card">
                <div className="card-body bg-secondary lead">
-                  <textarea
-                     rows="6"
-                     id="bottom-edit-input"
-                     autoFocus
-                     defaultValue={memoryCard.imagery}
-                     onChange={(e) => this.setCreateImageryText(e)}
-                  ></textarea>
+                  {this.props.creatableCard.answer}
                </div>
             </div>
 
@@ -96,6 +120,9 @@ export default class CreateImagery extends React.Component {
                      disabled: this.checkHasInvalidCharCount(),
                   }
                )}
+               onClick={() => {
+                  this.updateCreatableCard();
+               }}
             >
                <img
                   src={saveIcon}
@@ -109,3 +136,8 @@ export default class CreateImagery extends React.Component {
       );
    }
 }
+function mapStateToProps(state) {
+   return { creatableCard: state.creatableCard };
+}
+
+export default connect(mapStateToProps)(CreateImagery);
