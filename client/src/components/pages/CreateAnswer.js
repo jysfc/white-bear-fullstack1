@@ -11,7 +11,7 @@ class CreateAnswer extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
-         createAnswerText: "",
+         createAnswerText: this.props.creatableCard.answer || "",
       };
    }
 
@@ -36,7 +36,7 @@ class CreateAnswer extends React.Component {
          payload: {
             // the card itself
             id: getUuid(),
-            answer: this.state.answerText,
+            answer: this.state.createAnswerText,
             imagery: "",
             userId: this.props.currentUser.id,
             createdAt: currentTime,
@@ -103,7 +103,10 @@ class CreateAnswer extends React.Component {
    }
 }
 function mapStateToProps(state) {
-   return { currentUser: state.currentUser };
+   return {
+      currentUser: state.currentUser,
+      creatableCard: state.creatableCard,
+   };
 }
 
 export default connect(mapStateToProps)(CreateAnswer);
