@@ -58,7 +58,7 @@ class CreateImagery extends React.Component {
       });
       // save to the database (make an API call)
       axios
-         .post("/api/v1/memoryCards", this.props.creatableCard)
+         .post("/api/v1/memory-cards", this.props.creatableCard)
          .then((res) => {
             console.log("Memory Card created");
             // Display success overlay

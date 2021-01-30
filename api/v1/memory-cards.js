@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../../db");
 const selectAllCards = require("../../queries/selectAllCards");
+const insertMemoryCard = require("../../queries/insertMemoryCard");
 const validateJwt = require("../../utils/validateJwt");
 
 //@route        GET api/v1/memory-cards
@@ -40,7 +41,7 @@ router.get("/", validateJwt, (req, res) => {
                level: memoryCard.level,
             };
          });
-         res.json(camelCaseMemoryCards);
+         return res.status(200).json(camelCaseMemoryCards);
       })
       .catch((err) => {
          console.log(err);
@@ -51,6 +52,40 @@ router.get("/", validateJwt, (req, res) => {
 //@route        POST api/v1/memory-cards
 //@desc         POST a memory card to the memory cards resource
 //@access       Private
-router.post("/", validateJwt, (req, res) => {});
+router.post("/", validateJwt, (req, res) => {
+   const user = req.user;
+   const {
+      id,
+      imagery,
+      answer,
+      createdAt,
+      nextAttemptAt,
+      lastAttemptAt,
+      totalSuccessfulAttempts,
+      level,
+   } = req.body;
+   const memoryCard = {
+      id,
+      imagery,
+      answer,
+      user_id: user.id,
+      created_at: createdAt,
+      next_attempt_at: nextAttemptAt,
+      last_attempt_at: lastAttemptAt,
+      total_successful_attempts: totalSuccessfulAttempts,
+      level,
+   };
+   console.log(memoryCard);
+   db.query(insertMemoryCard, memoryCard)
+      .then((dbRes) => {
+         //success
+         console.log("Created memory card in the db:", dbRes);
+         //return with a status response
+      })
+      .catch((err) => {
+         console.log(err);
+         //return with an error status response
+      });
+});
 
 module.exports = router;
