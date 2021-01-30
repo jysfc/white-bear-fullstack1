@@ -8,7 +8,6 @@ const validateJwt = require("../../utils/validateJwt");
 //@route        GET api/v1/memory-cards
 //@desc         Get all memory cards for a user by search term and order
 //@access       Private
-
 router.get("/", validateJwt, (req, res) => {
    console.log(req.query);
    const { searchTerm, order } = req.query;
@@ -48,5 +47,10 @@ router.get("/", validateJwt, (req, res) => {
          res.status(400).json(err);
       });
 });
+
+//@route        POST api/v1/memory-cards
+//@desc         POST a memory card to the memory cards resource
+//@access       Private
+router.post("/", validateJwt, (req, res) => {});
 
 module.exports = router;
