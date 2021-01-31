@@ -59,17 +59,21 @@ class CreateImagery extends React.Component {
       // save to the database (make an API call)
       axios
          .post("/api/v1/memory-cards", this.props.creatableCard)
-         .then((res) => {
+         .then(() => {
             console.log("Memory Card created");
-            // Display success overlay
-            // route to "/create-answer"
+            // TODO: Display success overlay
+            // Clear creatableCard from redux
+            this.props.dispatch({
+               type: actions.UPDATE_CREATABLE_CARD,
+               payload: {},
+            });
+            // Route to "/create-answer"
+            this.props.history.push("/create-answer");
          })
          .catch((err) => {
             const { data } = err.response;
             console.log(data);
-            // Display error overlay
-            // Hide error overlay after 5 seconds
-            // stay on this page
+            // TODO: Display error overlay, hide after 5 seconds
          });
    }
 
