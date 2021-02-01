@@ -10,7 +10,7 @@ class ReviewCue extends React.Component {
       super(props);
       if (props.queue.cards.length === 0) {
          axios
-            .get("https://run.mocky.io/v3/5ab7f0da-5fd3-4c80-9bfa-76a7979a16a0")
+            .get(`api/v1/queue`)
             .then((res) => {
                // handle success
                console.log(res);

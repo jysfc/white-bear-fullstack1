@@ -45,7 +45,7 @@ router.get("/", validateJwt, (req, res) => {
       })
       .catch((err) => {
          console.log(err);
-         res.status(400).json(err);
+         return res.status(400).json(err);
       });
 });
 
@@ -86,7 +86,7 @@ router.post("/", validateJwt, (req, res) => {
       .catch((err) => {
          console.log(err);
          dbError = `${err.code} ${err.sqlMessage}`;
-         res.status(400).json({ dbError });
+         return res.status(400).json({ dbError });
       });
 });
 
