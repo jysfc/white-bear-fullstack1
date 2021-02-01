@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const selectAllCards = require("../../queries/selectAllCards");
+const selectQueue = require("../../queries/selectQueue");
 const validateJwt = require("../../utils/validateJwt");
 
 //@route        GET api/v1/queue
@@ -10,7 +10,7 @@ const validateJwt = require("../../utils/validateJwt");
 //@access       Private
 router.get("/", validateJwt, (req, res) => {
    const userId = req.user.id;
-   db.query(selectQueue)
+   db.query(selectQueue, userId)
       .then((memoryCards) => {
          //  console.log(memoryCards);
          const camelCaseMemoryCards = memoryCards.map((memoryCard) => {
