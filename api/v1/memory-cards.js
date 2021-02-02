@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require("../../db");
 const selectAllCards = require("../../queries/selectAllCards");
 const insertMemoryCard = require("../../queries/insertMemoryCard");
+const updateMemoryCard = require("../../queries/updateMemoryCard");
 const validateJwt = require("../../utils/validateJwt");
 
 //@route        GET api/v1/memory-cards
@@ -85,7 +86,7 @@ router.post("/", validateJwt, (req, res) => {
       })
       .catch((err) => {
          console.log(err);
-         dbError = `${err.code} ${err.sqlMessage}`;
+         const dbError = `${err.code} ${err.sqlMessage}`;
          return res.status(400).json({ dbError });
       });
 });
@@ -118,17 +119,17 @@ router.put("/:id", validateJwt, (req, res) => {
       level,
    };
    console.log(memoryCard);
-   // db.query(insertMemoryCard, memoryCard)
-   //    .then((dbRes) => {
-   //       //success
-   //       console.log("Created memory card in the db:", dbRes);
-   //       //return with a status response
-   //       return res.status(200).json({});
-   //    })
-   //    .catch((err) => {
-   //       console.log(err);
-   //       dbError = `${err.code} ${err.sqlMessage}`;
-   //       return res.status(400).json({ dbError });
-   //    });
+   db.query(updateMemoryCard, memoryCard)
+      .then((dbRes) => {
+         //success
+         console.log("Updated memory card in the db:", dbRes);
+         //return with a status response
+         return res.status(200).json({ success: "card updated" });
+      })
+      .catch((err) => {
+         console.log(err);
+         const dbError = `${err.code} ${err.sqlMessage}`;
+         return res.status(400).json({ dbError });
+      });
 });
 module.exports = router;
