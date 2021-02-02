@@ -13,6 +13,15 @@ class ReviewAnswer extends React.Component {
       }
    }
 
+   updateCardWithNeedsWork() {
+      this.goToNextCard();
+   }
+
+   updateCardWithGotIt() {
+      // db PUT
+      this.goToNextCard();
+   }
+
    goToNextCard() {
       if (this.props.queue.index === this.props.queue.cards.length - 1) {
          // on the last card
@@ -66,7 +75,7 @@ class ReviewAnswer extends React.Component {
                <button
                   className="btn btn-outline-primary"
                   onClick={() => {
-                     this.goToNextCard();
+                     this.updateCardWithNeedsWork();
                   }}
                >
                   Needs work
@@ -74,7 +83,7 @@ class ReviewAnswer extends React.Component {
                <button
                   className="btn btn-primary ml-4"
                   onClick={() => {
-                     this.goToNextCard();
+                     this.updateCardWithGotIt();
                   }}
                >
                   <img
