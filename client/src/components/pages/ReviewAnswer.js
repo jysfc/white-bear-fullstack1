@@ -15,7 +15,22 @@ class ReviewAnswer extends React.Component {
    }
 
    updateCardWithNeedsWork(memoryCard) {
-      this.goToNextCard();
+      const newMemoryCard = { ...memoryCard };
+      newMemoryCard.totalSuccessfulAttempts = 0;
+      newMemoryCard.lastAttemptAt = Date.now();
+      // db PUT this card in axios req
+      axios
+         .put(`/api/v1/memory-cards/${newMemoryCard.id}`, newMemoryCard)
+         .then(() => {
+            console.log("Memory Card updated");
+            // TODO: on success, fire success overlay
+            this.goToNextCard();
+         })
+         .catch((err) => {
+            const { data } = err.response;
+            console.log(data);
+            // TODO: Display error overlay, hide after 5 seconds
+         });
    }
 
    updateCardWithGotIt(memoryCard) {
