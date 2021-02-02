@@ -7,6 +7,6 @@ WHERE
     memory_cards.user_id = ?
 ORDER BY 
     memory_cards.last_attempt_at ASC
-LIMIT 2;
+LIMIT 10;
     `;
 module.exports = selectQueue;

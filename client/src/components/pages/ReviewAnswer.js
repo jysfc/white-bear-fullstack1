@@ -20,9 +20,10 @@ class ReviewAnswer extends React.Component {
    updateCardWithGotIt(memoryCard) {
       memoryCard.totalSuccessfulAttempts += 1;
       memoryCard.lastAttemptAt = Date.now();
-
-      // update the global state
+      const queue = { ...this.props.queue };
+      queue.cards[this.props.queue.index] = memoryCard;
       // db PUT this card in axios req
+
       // TODO: on success, fire success overlay
       // TODO: on err, fire err overlay
       this.goToNextCard();

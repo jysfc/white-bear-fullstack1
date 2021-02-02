@@ -10,6 +10,7 @@ const validateJwt = require("../../utils/validateJwt");
 //@access       Private
 router.get("/", validateJwt, (req, res) => {
    const userId = req.user.id;
+
    db.query(selectQueue, userId)
       .then((memoryCards) => {
          //  console.log(memoryCards);

@@ -12,35 +12,35 @@ class CreateImagery extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
-         createImageryText: "",
+         imageryText: "",
       };
    }
 
    checkHasInvalidCharCount() {
       if (
-         this.state.createImageryText.length > MAX_CARD_CHARS ||
-         this.state.createImageryText.length === 0
+         this.state.imageryText.length > MAX_CARD_CHARS ||
+         this.state.imageryText.length === 0
       ) {
          return true;
       } else return false;
    }
 
-   setCreateImageryText(e) {
-      this.setState({ createImageryText: e.target.value });
+   setImageryText(e) {
+      this.setState({ imageryText: e.target.value });
    }
 
-   async updateCreatableCard() {
+   updateCreatableCard() {
       if (!this.checkHasInvalidCharCount()) {
          console.log("updating creatable card");
          const creatableCard = { ...this.props.creatableCard };
-         creatableCard.imagery = this.state.createImageryText;
-         await this.props.dispatch({
+         creatableCard.imagery = this.state.imageryText;
+         this.props.dispatch({
             type: actions.UPDATE_CREATABLE_CARD,
             payload: creatableCard,
          });
          // save to the database (make an API call)
          axios
-            .post("/api/v1/memory-cards", this.props.creatableCard)
+            .post("/api/v1/memory-cards", creatableCard)
             .then(() => {
                console.log("Memory Card created");
                // TODO: Display success overlay
@@ -75,8 +75,8 @@ class CreateImagery extends React.Component {
                      rows="6"
                      id="imagery-input"
                      autoFocus={true}
-                     defaultValue={this.state.createImageryText}
-                     onChange={(e) => this.setCreateImageryText(e)}
+                     defaultValue={this.state.imageryText}
+                     onChange={(e) => this.setImageryText(e)}
                   ></textarea>
                </div>
             </div>
@@ -95,12 +95,12 @@ class CreateImagery extends React.Component {
                <span
                   className={classnames({
                      "text-danger": checkIsOver(
-                        this.state.createImageryText,
+                        this.state.imageryText,
                         MAX_CARD_CHARS
                      ),
                   })}
                >
-                  {this.state.createImageryText.length}/{MAX_CARD_CHARS}
+                  {this.state.imageryText.length}/{MAX_CARD_CHARS}
                </span>
             </p>
             <div className="clearfix"></div>
