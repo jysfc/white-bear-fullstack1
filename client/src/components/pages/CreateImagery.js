@@ -12,50 +12,31 @@ class CreateImagery extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
-         CreateImageryText: "",
+         createImageryText: "",
       };
    }
 
    checkHasInvalidCharCount() {
       if (
-         this.state.CreateImageryText.length > MAX_CARD_CHARS ||
-         this.state.CreateImageryText.length === 0
+         this.state.createImageryText.length > MAX_CARD_CHARS ||
+         this.state.createImageryText.length === 0
       ) {
          return true;
       } else return false;
    }
 
    setCreateImageryText(e) {
-      this.setState({ CreateImageryText: e.target.value });
+      this.setState({ createImageryText: e.target.value });
    }
 
    async updateCreatableCard() {
       if (!this.checkHasInvalidCharCount()) {
          console.log("updating creatable card");
-         const {
-            id,
-            answer,
-            userId,
-            createdAt,
-            nextAttemptAt,
-            lastAttemptAt,
-            totalSuccessfulAttempts,
-            level,
-         } = this.props.creatableCard;
+         const creatableCard = { ...this.props.creatableCard };
+         creatableCard.imagery = this.state.createImageryText;
          await this.props.dispatch({
             type: actions.UPDATE_CREATABLE_CARD,
-            payload: {
-               // the card itself
-               id,
-               answer,
-               imagery: this.state.CreateImageryText,
-               userId,
-               createdAt,
-               nextAttemptAt,
-               lastAttemptAt,
-               totalSuccessfulAttempts,
-               level,
-            },
+            payload: creatableCard,
          });
          // save to the database (make an API call)
          axios
@@ -94,7 +75,7 @@ class CreateImagery extends React.Component {
                      rows="6"
                      id="imagery-input"
                      autoFocus={true}
-                     defaultValue={this.state.CreateImageryText}
+                     defaultValue={this.state.createImageryText}
                      onChange={(e) => this.setCreateImageryText(e)}
                   ></textarea>
                </div>
@@ -114,12 +95,12 @@ class CreateImagery extends React.Component {
                <span
                   className={classnames({
                      "text-danger": checkIsOver(
-                        this.state.CreateImageryText,
+                        this.state.createImageryText,
                         MAX_CARD_CHARS
                      ),
                   })}
                >
-                  {this.state.CreateImageryText.length}/{MAX_CARD_CHARS}
+                  {this.state.createImageryText.length}/{MAX_CARD_CHARS}
                </span>
             </p>
             <div className="clearfix"></div>

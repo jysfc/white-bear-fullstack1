@@ -13,12 +13,18 @@ class ReviewAnswer extends React.Component {
       }
    }
 
-   updateCardWithNeedsWork() {
+   updateCardWithNeedsWork(memoryCard) {
       this.goToNextCard();
    }
 
-   updateCardWithGotIt() {
-      // db PUT
+   updateCardWithGotIt(memoryCard) {
+      memoryCard.totalSuccessfulAttempts += 1;
+      memoryCard.lastAttemptAt = Date.now();
+
+      // update the global state
+      // db PUT this card in axios req
+      // TODO: on success, fire success overlay
+      // TODO: on err, fire err overlay
       this.goToNextCard();
    }
 
@@ -33,8 +39,7 @@ class ReviewAnswer extends React.Component {
       }
    }
 
-   storeEditableCard() {
-      const memoryCard = this.props.queue.cards[this.props.queue.index];
+   storeEditableCard(memoryCard) {
       this.props.dispatch({
          type: actions.STORE_EDITABLE_CARD,
          payload: {
@@ -45,7 +50,7 @@ class ReviewAnswer extends React.Component {
    }
 
    render() {
-      const memoryCard = this.props.queue.cards[this.props.queue.index];
+      const memoryCard = { ...this.props.queue.cards[this.props.queue.index] };
       return (
          <AppTemplate>
             <div className="mb-5"></div>
@@ -66,7 +71,7 @@ class ReviewAnswer extends React.Component {
                to="/all-cards-edit"
                className="btn btn-link"
                onClick={() => {
-                  this.storeEditableCard();
+                  this.storeEditableCard(memoryCard);
                }}
             >
                Edit
@@ -75,7 +80,7 @@ class ReviewAnswer extends React.Component {
                <button
                   className="btn btn-outline-primary"
                   onClick={() => {
-                     this.updateCardWithNeedsWork();
+                     this.updateCardWithNeedsWork(memoryCard);
                   }}
                >
                   Needs work
@@ -83,7 +88,7 @@ class ReviewAnswer extends React.Component {
                <button
                   className="btn btn-primary ml-4"
                   onClick={() => {
-                     this.updateCardWithGotIt();
+                     this.updateCardWithGotIt(memoryCard);
                   }}
                >
                   <img
