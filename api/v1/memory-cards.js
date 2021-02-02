@@ -119,7 +119,7 @@ router.put("/:id", validateJwt, (req, res) => {
       level,
    };
    console.log(memoryCard);
-   db.query(updateMemoryCard, memoryCard)
+   db.query(updateMemoryCard, [memoryCard, id])
       .then((dbRes) => {
          //success
          console.log("Updated memory card in the db:", dbRes);

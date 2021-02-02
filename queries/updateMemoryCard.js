@@ -1,4 +1,9 @@
 const updateMemoryCard = `
-    INSERT INTO memory_cards SET ?;
+    UPDATE 
+        memory_cards 
+    SET 
+        ?
+    WHERE
+        id = ?;
 `;
 module.exports = updateMemoryCard;
