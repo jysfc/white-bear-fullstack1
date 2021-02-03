@@ -78,12 +78,22 @@ class AllCardsEdit extends React.Component {
    }
 
    deleteCard() {
-      if (this.props.editableCard.prevRoute === "/review-answer") {
-         this.deleteCardFromStore();
-      }
-      if (this.props.editableCard.prevRoute === "/all-cards") {
-         this.props.history.push("/all-cards");
-      }
+      // query db to delete card
+      axios
+         .delete()
+         .then(() => {
+            // TODO: Display success overlay
+            if (this.props.editableCard.prevRoute === "/review-answer") {
+               this.deleteCardFromStore();
+            }
+            if (this.props.editableCard.prevRoute === "/all-cards") {
+               this.props.history.push("/all-cards");
+            }
+         })
+         .catch((err) => {
+            console.log(err);
+            // TODO: Display error overlay
+         });
    }
 
    deleteCardFromStore() {
