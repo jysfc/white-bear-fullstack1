@@ -78,10 +78,12 @@ class AllCardsEdit extends React.Component {
    }
 
    deleteCard() {
+      const memoryCard = { ...this.props.editableCard.card };
       // query db to delete card
       axios
-         .delete()
-         .then(() => {
+         .delete(`/api/v1/memory-cards/${memoryCard.id}`)
+         .then((res) => {
+            console.log(res.data);
             // TODO: Display success overlay
             if (this.props.editableCard.prevRoute === "/review-answer") {
                this.deleteCardFromStore();
@@ -91,7 +93,7 @@ class AllCardsEdit extends React.Component {
             }
          })
          .catch((err) => {
-            console.log(err);
+            console.log(err.response.data);
             // TODO: Display error overlay
          });
    }
