@@ -47,6 +47,10 @@ class AllCardsEdit extends React.Component {
       this.setState({ isDeleteChecked: !this.state.isDeleteChecked });
    }
 
+   saveCard() {
+      this.props.history.push(this.props.editableCard.prevRoute);
+   }
+
    deleteCard() {
       if (this.props.editableCard.prevRoute === "/review-answer") {
          this.deleteCardFromStore();
@@ -145,13 +149,15 @@ class AllCardsEdit extends React.Component {
                   >
                      Discard changes
                   </Link>
-                  <Link
-                     to={this.props.editableCard.prevRoute}
+                  <button
                      className={classnames(
                         "btn btn-primary btn-lg ml-4 float-right",
                         { disabled: this.checkHasInvalidCharCount() }
                      )}
                      id="edit-save"
+                     onClick={() => {
+                        this.saveCard();
+                     }}
                   >
                      <img
                         src={saveIcon}
@@ -160,7 +166,7 @@ class AllCardsEdit extends React.Component {
                         style={{ marginBottom: "3px", marginRight: "4px" }}
                      />
                      Save
-                  </Link>
+                  </button>
 
                   {/* <!-- card properties --> */}
                   <p className="text-center lead text-muted mt-6 mb-4">
