@@ -55,6 +55,15 @@ class AllCardsEdit extends React.Component {
             .put(`/api/v1/memory-cards/${memoryCard.id}`, memoryCard)
             .then(() => {
                console.log("Memory Card updated");
+
+               // update redux queue
+               const cards = [...this.props.queue.cards];
+               cards[this.props.queue.index] = memoryCard;
+               this.props.dispatch({
+                  type: actions.UPDATE_QUEUED_CARDS,
+                  payload: cards,
+               });
+
                // TODO: on success, fire success overlay
                this.props.history.push(this.props.editableCard.prevRoute);
             })
@@ -63,6 +72,8 @@ class AllCardsEdit extends React.Component {
                console.log(data);
                // TODO: Display error overlay, hide after 5 seconds
             });
+      } else {
+         console.log("INVALID char counts");
       }
    }
 
