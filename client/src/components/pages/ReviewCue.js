@@ -40,32 +40,41 @@ class ReviewCue extends React.Component {
       const memoryCard = this.props.queue.cards[this.props.queue.index];
       return (
          <AppTemplate>
-            <div className="mb-5"></div>
             {/* <!-- Card --> */}
-            <div className="card">
-               <div className="card-body bg-primary lead mb-5">
-                  {memoryCard && memoryCard.imagery}
-               </div>
-            </div>
+            <div className="mb-5"></div>
+            {memoryCard && (
+               <>
+                  <div className="card">
+                     <div className="card-body bg-primary lead mb-5">
+                        {memoryCard && memoryCard.imagery}
+                     </div>
+                  </div>
 
-            {/* <!-- buttons --> */}
-            {this.props.queue.index > 0 && (
-               <button
-                  className="btn btn-link"
-                  id="back-to-answer"
-                  onClick={() => {
-                     this.goToPrevCard();
-                  }}
-               >
-                  Previous card
-               </button>
+                  {/* <!-- buttons --> */}
+                  {this.props.queue.index > 0 && (
+                     <button
+                        className="btn btn-link"
+                        id="back-to-answer"
+                        onClick={() => {
+                           this.goToPrevCard();
+                        }}
+                     >
+                        Previous card
+                     </button>
+                  )}
+                  <Link
+                     to="/review-answer"
+                     className="btn btn-outline-primary float-right"
+                  >
+                     Show answer
+                  </Link>
+               </>
             )}
-            <Link
-               to="/review-answer"
-               className="btn btn-outline-primary float-right"
-            >
-               Show answer
-            </Link>
+            {!memoryCard && (
+               <p className="lead text-muted text-center">
+                  You have 0 cards. Please create a card before reviewing.
+               </p>
+            )}
          </AppTemplate>
       );
    }
