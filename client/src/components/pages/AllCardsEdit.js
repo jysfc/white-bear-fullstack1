@@ -84,9 +84,20 @@ class AllCardsEdit extends React.Component {
          .delete(`/api/v1/memory-cards/${memoryCard.id}`)
          .then((res) => {
             console.log(res.data);
+            const deletableCard = this.props.editableCard.card;
+            const cards = this.props.queue.cards;
+            const filteredCards = without(cards, deletableCard); // find cards and remove it
+            this.props.dispatch({
+               type: actions.UPDATE_QUEUED_CARDS,
+               payload: filteredCards,
+            });
             // TODO: Display success overlay
             if (this.props.editableCard.prevRoute === "/review-answer") {
-               this.deleteCardFromStore();
+               if (filteredCards[this.props.queue.index] === undefined) {
+                  this.props.history.push("/review-done");
+               } else {
+                  this.props.history.push("/review-cue");
+               }
             }
             if (this.props.editableCard.prevRoute === "/all-cards") {
                this.props.history.push("/all-cards");
@@ -96,22 +107,6 @@ class AllCardsEdit extends React.Component {
             console.log(err.response.data);
             // TODO: Display error overlay
          });
-   }
-
-   deleteCardFromStore() {
-      const deletedCard = this.props.editableCard.card;
-      const cards = this.props.queue.cards;
-      const filteredCards = without(cards, deletedCard);
-      console.log(filteredCards);
-      this.props.dispatch({
-         type: actions.UPDATE_QUEUED_CARDS,
-         payload: filteredCards,
-      });
-      if (filteredCards[this.props.queue.index] === undefined) {
-         this.props.history.push("/review-done");
-      } else {
-         this.props.history.push("/review-cue");
-      }
    }
 
    render() {
