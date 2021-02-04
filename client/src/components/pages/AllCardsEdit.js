@@ -7,7 +7,6 @@ import classnames from "classnames";
 import { checkIsOver, MAX_CARD_CHARS } from "../../utils/helpers";
 import { connect } from "react-redux";
 import isEmpty from "lodash/isEmpty";
-import without from "lodash/without";
 import actions from "../../store/actions";
 import axios from "axios";
 
@@ -85,15 +84,21 @@ class AllCardsEdit extends React.Component {
          .then((res) => {
             console.log(res.data);
             const deletableCard = this.props.editableCard.card;
+            console.log("deletableCard: ", deletableCard);
             const cards = this.props.queue.cards;
-            const filteredCards = without(cards, deletableCard); // find cards and remove it
+            console.log("queue cards: ", cards);
+            const filteredCards = cards.filter((card) => {
+               return card.id !== deletableCard.id;
+            }); // find cards and filter it
             this.props.dispatch({
                type: actions.UPDATE_QUEUED_CARDS,
                payload: filteredCards,
             });
+            const index = this.props.queue.index;
+            console.log({ index });
             // TODO: Display success overlay
             if (this.props.editableCard.prevRoute === "/review-answer") {
-               if (filteredCards[this.props.queue.index] === undefined) {
+               if (filteredCards[index] === undefined) {
                   this.props.history.push("/review-done");
                } else {
                   this.props.history.push("/review-cue");
