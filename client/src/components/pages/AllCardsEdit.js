@@ -177,7 +177,7 @@ class AllCardsEdit extends React.Component {
                         Top: {this.state.imageryText.length}/{MAX_CARD_CHARS}
                      </span>
                   </p>
-                  <div className="clearFix"></div>
+                  <div className="clearfix"></div>
 
                   {/* <!-- buttons --> */}
                   <Link
