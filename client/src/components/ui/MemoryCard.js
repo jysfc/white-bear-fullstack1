@@ -6,6 +6,7 @@ import actions from "../../store/actions";
 
 class MemoryCard extends React.Component {
    storeEditableCard(memoryCard) {
+      console.log("STORING EDITABLE CARD", memoryCard);
       this.props.dispatch({
          type: actions.STORE_EDITABLE_CARD,
          payload: {
@@ -16,7 +17,8 @@ class MemoryCard extends React.Component {
    }
 
    render() {
-      const memoryCard = this.props.queue.cards[this.props.queue.index];
+      const memoryCard = this.props.card;
+      console.log("Memory card from render: ", memoryCard);
       return (
          // <!-- Card -->
          <div className="d-flex align-items-start">
@@ -56,9 +58,7 @@ class MemoryCard extends React.Component {
 }
 
 function mapStateToProps(state) {
-   return {
-      queue: state.queue,
-   };
+   return {};
 }
 
 export default connect(mapStateToProps)(MemoryCard);
